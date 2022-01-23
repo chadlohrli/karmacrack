@@ -1,7 +1,4 @@
 require("@nomiclabs/hardhat-waffle");
-require("@nomiclabs/hardhat-web3");
-require('hardhat-gas-reporter');
-require("@nomiclabs/hardhat-etherscan");
 require('dotenv').config();
 
 
@@ -24,8 +21,8 @@ task("balance", "Prints an account's balance")
 module.exports = {
     networks: {
         goerli: {
-            url: process.env.GOERLI_API_KEY,
-            accounts: [process.env.GOERLI_DEPLOY_KEY]
+            url: process.env.GOERLI_API_KEY || "",
+            accounts: process.env.GOERLI_DEPLOY_KEY ? [process.env.GOERLI_DEPLOY_KEY] : []
         },
     },
     solidity: {

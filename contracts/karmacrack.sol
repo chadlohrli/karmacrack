@@ -6,17 +6,17 @@ interface MagicERC20 {
     function balanceOf(address _owner) external view returns (uint256);
 }
 
-interface KarmaGang {
+interface IKarmaGang {
     function register() external;
     function submit(string calldata twitterHandle, string calldata freeformMessage, bool claimDevDaoNft) external;
 }
 
 contract karmacrack is MagicERC20 {
 
-    KarmaGang kg;
+    IKarmaGang kg;
 
     constructor(address karma) payable {
-        kg = KarmaGang(karma);
+        kg = IKarmaGang(karma);
         kg.register();
     }
 
@@ -55,6 +55,20 @@ contract Factory {
     {
         bytes32 hash = keccak256(
             abi.encodePacked(bytes1(0xff), address(this), _salt, keccak256(bytecode))
+        );
+
+        // NOTE: cast last 20 bytes of hash to address
+        return address(uint160(uint(hash)));
+    }
+
+    // 2.5 Compute address from already hashed bytecode and factory address(used for testing)
+    function getAddress_(bytes memory hashedBytecode, address factoryAddy, uint _salt)
+        public
+        view
+        returns (address)
+    {
+        bytes32 hash = keccak256(
+            abi.encodePacked(bytes1(0xff), factoryAddy, _salt, hashedBytecode)
         );
 
         // NOTE: cast last 20 bytes of hash to address
