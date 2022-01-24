@@ -9,6 +9,7 @@
     "hardhat": "^2.8.3"
   },
   "dependencies": {
-    "dotenv": "^14.2.0"
+    "dotenv": "^14.2.0",
+    "keccak256": "^1.0.6"
   }
 }

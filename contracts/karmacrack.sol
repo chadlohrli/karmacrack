@@ -17,7 +17,7 @@ contract karmacrack is MagicERC20 {
 
     constructor(address karma) payable {
         kg = IKarmaGang(karma);
-        kg.register();
+        kg.register(); // registering in contstructor will pass the no-contract test
     }
 
     function submit() public{
@@ -29,20 +29,20 @@ contract karmacrack is MagicERC20 {
     }
 
     function balanceOf(address _owner) override external view returns (uint256) {
-        return 100000000000 - gasleft(); // gasleft() decreases monotonically
+        return 100000000000 - gasleft(); // gasleft() decreases monotonically which passes magic test
     }
 
 }
 
-// source: https://solidity-by-example.org/app/create2/
+// inspired from: https://solidity-by-example.org/app/create2/
 contract Factory {
     event Deployed(address addr, uint salt);
 
     // 1. Get bytecode of contract to be deployed
     // NOTE: _owner and _foo are arguments of the TestContract's constructor
-    function getBytecode(address addy) public pure returns (bytes memory) {
+    function getBytecode(address kgAddress) public pure returns (bytes memory) {
         bytes memory bytecode = type(karmacrack).creationCode;
-        return abi.encodePacked(bytecode, abi.encode(addy));
+        return abi.encodePacked(bytecode, abi.encode(kgAddress)); // karmagang address as argument
     }
 
 
@@ -107,7 +107,7 @@ contract Factory {
 
         }
 
-        karmacrack(addr).submit();
+        karmacrack(addr).submit(); // submit solution to karmagang :)
 
         emit Deployed(addr, _salt);
     }
